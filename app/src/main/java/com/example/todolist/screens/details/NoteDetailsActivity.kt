@@ -10,10 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.todolist.App
 import com.example.todolist.R
-import com.example.todolist.model.Note
+import com.example.todolist.model.TaskList
 
 class NoteDetailsActivity : AppCompatActivity() {
-    private lateinit var note: Note
+    private lateinit var taskList: TaskList
     private var editText: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,10 +26,10 @@ class NoteDetailsActivity : AppCompatActivity() {
         title = getString(R.string.note_details_title)
         editText = findViewById(R.id.text)
         if (intent.hasExtra(EXTRA_NOTE)) {
-            note = intent.getParcelableExtra(EXTRA_NOTE)!!
-            editText?.setText(note.text)
+            taskList = intent.getParcelableExtra(EXTRA_NOTE)!!
+            editText?.setText(taskList.listName)
         } else {
-            note = Note()
+            taskList = TaskList()
         }
     }
 
@@ -43,13 +43,11 @@ class NoteDetailsActivity : AppCompatActivity() {
             android.R.id.home -> finish()
             R.id.action_save -> {
                 if (!editText?.text.isNullOrEmpty()) {
-                    note.text = "${editText?.text}"
-                    note.done = false
-                    note.timestamp = System.currentTimeMillis()
+                    taskList.listName = "${editText?.text}"
                     if (intent.hasExtra(EXTRA_NOTE)) {
-                        App.instance.noteDao.update(note)
+                        App.instance.taskListDao.update(taskList)
                     } else {
-                        App.instance.noteDao.insert(note)
+                        App.instance.taskListDao.insert(taskList)
                     }
                     finish()
 
@@ -63,10 +61,10 @@ class NoteDetailsActivity : AppCompatActivity() {
         private const val EXTRA_NOTE = "NoteDetailsActivity.EXTRA_NOTE"
 
         @JvmStatic
-        fun start(caller: Activity, note: Note?) {
+        fun start(caller: Activity, taskList: TaskList?) {
             val intent = Intent(caller, NoteDetailsActivity::class.java)
-            if (note != null) {
-                intent.putExtra(EXTRA_NOTE, note)
+            if (taskList != null) {
+                intent.putExtra(EXTRA_NOTE, taskList)
             }
             caller.startActivity(intent)
         }

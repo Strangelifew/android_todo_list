@@ -3,11 +3,11 @@ package com.example.todolist
 import android.app.Application
 import androidx.room.Room
 import com.example.todolist.data.AppDatabase
-import com.example.todolist.data.NoteDao
+import com.example.todolist.data.TaskListDao
 
 class App : Application() {
     var database: AppDatabase? = null
-    lateinit var noteDao: NoteDao
+    lateinit var taskListDao: TaskListDao
     override fun onCreate() {
         super.onCreate()
         instance = this
@@ -16,8 +16,9 @@ class App : Application() {
             AppDatabase::class.java, "app-db-name"
         )
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigration()
             .build()
-        noteDao = database!!.noteDao()
+        taskListDao = database!!.noteDao()
     }
 
     companion object {
