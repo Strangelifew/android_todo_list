@@ -1,4 +1,4 @@
-package com.arhiser.todolist;
+package com.example.todolist;
 
 import org.junit.Test;
 
