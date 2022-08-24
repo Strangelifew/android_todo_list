@@ -18,7 +18,7 @@ class App : Application() {
             .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
-        taskListDao = database!!.noteDao()
+        taskListDao = database!!.tasListDao()
     }
 
     companion object {

@@ -9,11 +9,9 @@ import androidx.room.Entity
 
 @Entity
 data class TaskList(
-    @JvmField
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "list_id")
     var listId: Int = 0,
-    @JvmField
     @ColumnInfo(name = "list_name")
     var listName: String
 ) : Parcelable {
@@ -22,7 +20,7 @@ data class TaskList(
 
     protected constructor (`in`: Parcel) : this(
         listId = `in`.readInt(),
-        listName = `in`.readString().orEmpty(),
+        listName = `in`.readString().orEmpty()
     )
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
