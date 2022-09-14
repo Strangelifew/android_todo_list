@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.example.todolist.screens.details.NoteDetailsActivity"
+        <activity android:name="com.example.todolist.screens.details.TaskListDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

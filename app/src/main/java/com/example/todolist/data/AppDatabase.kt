@@ -8,7 +8,7 @@ import com.example.todolist.model.TaskList
 
 @Database(entities = [TaskList::class, Task::class, Status::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun tasListDao(): TaskListDao
+    abstract fun taskListDao(): TaskListDao
     abstract fun taskDao(): TaskDao
     abstract fun statusDao(): StatusDao
 }

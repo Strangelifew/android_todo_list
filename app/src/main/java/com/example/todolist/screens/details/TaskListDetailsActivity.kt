@@ -12,7 +12,7 @@ import com.example.todolist.App
 import com.example.todolist.R
 import com.example.todolist.model.TaskList
 
-class NoteDetailsActivity : AppCompatActivity() {
+class TaskListDetailsActivity : AppCompatActivity() {
     private lateinit var taskList: TaskList
     private var editText: EditText? = null
 
@@ -61,8 +61,8 @@ class NoteDetailsActivity : AppCompatActivity() {
         private const val EXTRA_NOTE = "NoteDetailsActivity.EXTRA_NOTE"
 
         @JvmStatic
-        fun start(caller: Activity, taskList: TaskList?) {
-            val intent = Intent(caller, NoteDetailsActivity::class.java)
+        fun startTaskListDetails(caller: Activity, taskList: TaskList?) {
+            val intent = Intent(caller, TaskListDetailsActivity::class.java)
             if (taskList != null) {
                 intent.putExtra(EXTRA_NOTE, taskList)
             }
