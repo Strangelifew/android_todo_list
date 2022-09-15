@@ -25,8 +25,8 @@ class TaskListDetailsActivity : AppCompatActivity() {
         supportActionBar!!.setHomeButtonEnabled(true)
         title = getString(R.string.note_details_title)
         editText = findViewById(R.id.text)
-        if (intent.hasExtra(EXTRA_NOTE)) {
-            taskList = intent.getParcelableExtra(EXTRA_NOTE)!!
+        if (intent.hasExtra(EXTRA_TASK_LIST)) {
+            taskList = intent.getParcelableExtra(EXTRA_TASK_LIST)!!
             editText?.setText(taskList.listName)
         } else {
             taskList = TaskList()
@@ -44,7 +44,7 @@ class TaskListDetailsActivity : AppCompatActivity() {
             R.id.action_save -> {
                 if (!editText?.text.isNullOrEmpty()) {
                     taskList.listName = "${editText?.text}"
-                    if (intent.hasExtra(EXTRA_NOTE)) {
+                    if (intent.hasExtra(EXTRA_TASK_LIST)) {
                         App.instance.taskListDao.update(taskList)
                     } else {
                         App.instance.taskListDao.insert(taskList)
@@ -58,13 +58,13 @@ class TaskListDetailsActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_NOTE = "NoteDetailsActivity.EXTRA_NOTE"
+        private const val EXTRA_TASK_LIST = "NoteDetailsActivity.EXTRA_TASK_LIST"
 
         @JvmStatic
         fun startTaskListDetails(caller: Activity, taskList: TaskList?) {
             val intent = Intent(caller, TaskListDetailsActivity::class.java)
             if (taskList != null) {
-                intent.putExtra(EXTRA_NOTE, taskList)
+                intent.putExtra(EXTRA_TASK_LIST, taskList)
             }
             caller.startActivity(intent)
         }

@@ -10,14 +10,14 @@ interface TaskDao {
     @get:Query("SELECT * FROM Task")
     val all: List<Task>
 
-    @get:Query("SELECT * FROM Task")
-    val allLiveData: LiveData<List<Task>>
-
     @Query("SELECT * FROM Task WHERE task_id IN (:taskIds)")
     fun loadAllByIds(taskIds: IntArray): List<Task>
 
     @Query("SELECT * FROM Task WHERE task_id = :taskId LIMIT 1")
     fun findById(taskId: Int): Task
+
+    @Query("SELECT * FROM Task WHERE list_id = :listId")
+    fun findByListId(listId: Int): LiveData<List<Task>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(task: Task)

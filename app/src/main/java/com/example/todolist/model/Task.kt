@@ -14,9 +14,9 @@ data class Task(
     @ColumnInfo(name = "list_id")
     var listId: Int,
     @ColumnInfo(name = "status_id")
-    var statusId: Int,
+    var statusId: Int = 0,
     @ColumnInfo(name = "description")
-    var description: String
+    var description: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),

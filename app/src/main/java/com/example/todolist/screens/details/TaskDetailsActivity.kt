@@ -12,9 +12,10 @@ import com.example.todolist.App
 import com.example.todolist.R
 import com.example.todolist.model.Task
 import com.example.todolist.model.TaskList
+import com.example.todolist.screens.tasklist.TaskListActivity
 
 class TaskDetailsActivity : AppCompatActivity() {
-    private lateinit var taskList: TaskList
+    private lateinit var task: Task
     private var editText: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,11 +27,11 @@ class TaskDetailsActivity : AppCompatActivity() {
         supportActionBar!!.setHomeButtonEnabled(true)
         title = getString(R.string.note_details_title)
         editText = findViewById(R.id.text)
-        if (intent.hasExtra(EXTRA_NOTE)) {
-            taskList = intent.getParcelableExtra(EXTRA_NOTE)!!
-            editText?.setText(taskList.listName)
+        if (intent.hasExtra(EXTRA_TASK)) {
+            task = intent.getParcelableExtra(EXTRA_TASK)!!
+            editText?.setText(task.description)
         } else {
-            taskList = TaskList()
+            task = Task(listId = intent.getParcelableExtra<TaskList>(EXTRA_TASK_LIST)!!.listId)
         }
     }
 
@@ -44,11 +45,11 @@ class TaskDetailsActivity : AppCompatActivity() {
             android.R.id.home -> finish()
             R.id.action_save -> {
                 if (!editText?.text.isNullOrEmpty()) {
-                    taskList.listName = "${editText?.text}"
-                    if (intent.hasExtra(EXTRA_NOTE)) {
-                        App.instance.taskListDao.update(taskList)
+                    task.description = "${editText?.text}"
+                    if (intent.hasExtra(EXTRA_TASK)) {
+                        App.instance.taskDao.update(task)
                     } else {
-                        App.instance.taskListDao.insert(taskList)
+                        App.instance.taskDao.insert(task)
                     }
                     finish()
 
@@ -59,13 +60,15 @@ class TaskDetailsActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val EXTRA_NOTE = "NoteDetailsActivity.EXTRA_NOTE"
+        private const val EXTRA_TASK = "TaskDetailsActivity.EXTRA_TASK"
+        private const val EXTRA_TASK_LIST = "TaskDetailsActivity.EXTRA_TASK_LIST"
 
         @JvmStatic
-        fun startTaskDetails(caller: Activity, task: Task?) {
+        fun startTaskDetails(caller: Activity, taskList: TaskList, task: Task?) {
             val intent = Intent(caller, TaskDetailsActivity::class.java)
+            intent.putExtra(EXTRA_TASK_LIST, taskList)
             if (task != null) {
-                intent.putExtra(EXTRA_NOTE, task)
+                intent.putExtra(EXTRA_TASK, task)
             }
             caller.startActivity(intent)
         }

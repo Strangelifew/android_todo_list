@@ -13,10 +13,8 @@ data class TaskList(
     @ColumnInfo(name = "list_id")
     var listId: Int = 0,
     @ColumnInfo(name = "list_name")
-    var listName: String
+    var listName: String = ""
 ) : Parcelable {
-
-    constructor() : this(listName = "")
 
     protected constructor (`in`: Parcel) : this(
         listId = `in`.readInt(),

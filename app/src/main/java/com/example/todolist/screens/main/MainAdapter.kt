@@ -14,6 +14,7 @@ import com.example.todolist.R
 import com.example.todolist.model.TaskList
 import com.example.todolist.screens.details.TaskListDetailsActivity.Companion.startTaskListDetails
 import com.example.todolist.screens.main.MainAdapter.TaskListViewHolder
+import com.example.todolist.screens.tasklist.TaskListActivity.Companion.startTaskList
 
 class MainAdapter : RecyclerView.Adapter<TaskListViewHolder>() {
     private val sortedList: SortedList<TaskList>
@@ -57,7 +58,7 @@ class MainAdapter : RecyclerView.Adapter<TaskListViewHolder>() {
             noteText = itemView.findViewById(R.id.note_text)
             completed = itemView.findViewById(R.id.completed)
             delete = itemView.findViewById(R.id.delete)
-            itemView.setOnClickListener { startTaskListDetails((itemView.context as Activity), taskList) }
+            itemView.setOnClickListener { startTaskList((itemView.context as Activity), taskList) }
             delete.setOnClickListener { App.instance.taskListDao.delete(taskList) }
         }
     }
