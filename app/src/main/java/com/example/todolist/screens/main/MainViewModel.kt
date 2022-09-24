@@ -4,5 +4,5 @@ import androidx.lifecycle.ViewModel
 import com.example.todolist.App
 
 class MainViewModel : ViewModel() {
-    val taskListLiveData = App.instance.taskListDao.allLiveData
+    val taskListLiveData = App.taskListDao.allLiveData
 }

@@ -9,37 +9,52 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.todolist.App
 import com.example.todolist.R
 import com.example.todolist.model.TaskList
 import com.example.todolist.screens.details.TaskDetailsActivity.Companion.startTaskDetails
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.todolist.screens.details.TaskListDetailsActivity.Companion.startTaskListDetails
 
 class TaskListActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
+    val taskList: TaskList by lazy { intent.getParcelableExtra(EXTRA_TASK_LIST)!! }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_task_list)
-        recyclerView = findViewById(R.id.task_list)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        val taskList: TaskList = intent.getParcelableExtra(EXTRA_TASK_LIST)!!
+
         val adapter = TaskListAdapter(taskList)
-        recyclerView.adapter = adapter
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener {
+
+        findViewById<RecyclerView>(R.id.task_list).also {
+            it.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+            it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+            it.adapter = adapter
+        }
+
+        setSupportActionBar(findViewById<Toolbar>(R.id.toolbar))
+
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             startTaskDetails(this, taskList, null)
         }
-        val mainViewModel = ViewModelProviders.of(this).get(
+
+        findViewById<FloatingActionButton>(R.id.edit).setOnClickListener {
+            startTaskListDetails(this, taskList)
+        }
+
+        ViewModelProviders.of(this).get(
             TaskListViewModel::class.java
-        )
-        mainViewModel.findByListId(taskList.listId).observe(this) { tasks -> adapter.setItems(tasks) }
+        ).findByListId(taskList.listId).observe(this, adapter::setItems)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        App.taskListDao.findById(taskList.listId)?.listName?.let { title = it }
     }
 
     companion object {
-        private const val EXTRA_TASK_LIST = "NoteDetailsActivity.EXTRA_TASK_LIST"
+        private const val EXTRA_TASK_LIST = "TaskListActivity.EXTRA_TASK_LIST"
 
         @JvmStatic
         fun startTaskList(caller: Activity, taskList: TaskList) {

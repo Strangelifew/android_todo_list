@@ -4,5 +4,5 @@ import androidx.lifecycle.ViewModel
 import com.example.todolist.App
 
 class TaskListViewModel : ViewModel() {
-    fun findByListId(listId: Int) = App.instance.taskDao.findByListId(listId)
+    fun findByListId(listId: Int) = App.taskDao.findByListId(listId)
 }

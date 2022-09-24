@@ -12,23 +12,32 @@ import com.example.todolist.screens.details.TaskListDetailsActivity.Companion.st
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var  recyclerView: RecyclerView
+    private val adapter = MainAdapter(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
-        recyclerView = findViewById(R.id.main_list)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        val linearLayoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        val adapter = MainAdapter()
-        recyclerView.adapter = adapter
-        val fab = findViewById<FloatingActionButton>(R.id.fab)
-        fab.setOnClickListener { startTaskListDetails(this@MainActivity, null) }
-        val mainViewModel = ViewModelProviders.of(this).get(
+
+        findViewById<RecyclerView>(R.id.main_list).also {
+            it.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+            it.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+            it.adapter = adapter
+        }
+
+        findViewById<Toolbar>(R.id.toolbar).also(::setSupportActionBar)
+
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
+            startTaskListDetails(this, null)
+        }
+
+        ViewModelProviders.of(this).get(
             MainViewModel::class.java
-        )
-        mainViewModel.taskListLiveData.observe(this) { taskLists -> adapter.setItems(taskLists) }
+        ).taskListLiveData.observe(this, adapter::setItems)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        adapter.notifyDataSetChanged()
     }
 }

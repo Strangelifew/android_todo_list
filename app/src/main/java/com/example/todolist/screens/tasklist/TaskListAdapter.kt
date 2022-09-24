@@ -1,7 +1,6 @@
 package com.example.todolist.screens.tasklist
 
 import android.app.Activity
-import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +46,7 @@ class TaskListAdapter(private val taskList: TaskList) : RecyclerView.Adapter<Tas
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
         return TaskViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_note_list, parent, false),
+            LayoutInflater.from(parent.context).inflate(R.layout.task_item, parent, false),
             taskList
         )
     }
@@ -65,29 +64,19 @@ class TaskListAdapter(private val taskList: TaskList) : RecyclerView.Adapter<Tas
     }
 
     class TaskViewHolder(itemView: View, private val taskList: TaskList) : RecyclerView.ViewHolder(itemView) {
-        var noteText: TextView = itemView.findViewById(R.id.note_text)
-        var delete: View = itemView.findViewById(R.id.delete)
         lateinit var task: Task
-        var silentUpdate = false
         fun bind(task: Task) {
             this.task = task
-            noteText.text = task.description
-            updateStrokeOut()
-            silentUpdate = true
-            silentUpdate = false
-        }
 
-        private fun updateStrokeOut() {
-            noteText.paintFlags = noteText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            itemView.findViewById<TextView>(R.id.task_text).text = task.description
         }
 
         init {
-            itemView.setOnClickListener { startTaskDetails(
-                (itemView.context as Activity),
-                taskList,
-                task
-            ) }
-            delete.setOnClickListener { App.instance.taskDao.delete(task) }
+            itemView.setOnClickListener {
+                startTaskDetails((itemView.context as Activity), taskList, task)
+            }
+
+            itemView.findViewById<View>(R.id.delete).setOnClickListener { App.taskDao.delete(task) }
         }
     }
 

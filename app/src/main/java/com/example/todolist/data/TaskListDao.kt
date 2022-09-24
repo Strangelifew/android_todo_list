@@ -18,6 +18,12 @@ interface TaskListDao {
     @Query("SELECT * FROM TaskList WHERE list_id = :listId LIMIT 1")
     fun findById(listId: Int): TaskList?
 
+    @Query("SELECT COUNT(*) FROM Task WHERE list_id = :listId")
+    fun countNumberOfTasksInList(listId: Int): Int
+
+    @Query("SELECT COUNT(*) FROM Task")
+    fun countNumberOfTasks(): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(taskList: TaskList)
 

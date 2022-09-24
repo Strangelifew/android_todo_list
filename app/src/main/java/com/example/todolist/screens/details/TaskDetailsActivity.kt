@@ -7,12 +7,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.example.todolist.App
 import com.example.todolist.R
 import com.example.todolist.model.Task
 import com.example.todolist.model.TaskList
-import com.example.todolist.screens.tasklist.TaskListActivity
 
 class TaskDetailsActivity : AppCompatActivity() {
     private lateinit var task: Task
@@ -20,13 +18,17 @@ class TaskDetailsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_note_details)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
+
+        setContentView(R.layout.activity_task_details)
+
+        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
-        title = getString(R.string.note_details_title)
+
+        title = getString(R.string.task_details_title)
+
         editText = findViewById(R.id.text)
+
         if (intent.hasExtra(EXTRA_TASK)) {
             task = intent.getParcelableExtra(EXTRA_TASK)!!
             editText?.setText(task.description)
@@ -47,9 +49,9 @@ class TaskDetailsActivity : AppCompatActivity() {
                 if (!editText?.text.isNullOrEmpty()) {
                     task.description = "${editText?.text}"
                     if (intent.hasExtra(EXTRA_TASK)) {
-                        App.instance.taskDao.update(task)
+                        App.taskDao.update(task)
                     } else {
-                        App.instance.taskDao.insert(task)
+                        App.taskDao.insert(task)
                     }
                     finish()
 

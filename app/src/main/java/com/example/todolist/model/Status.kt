@@ -1,10 +1,30 @@
 package com.example.todolist.model
 
+import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+
+enum class StatusType { PLANNED, IN_PROGRESS, DONE }
+
+class StatusTypeConverter {
+    @TypeConverter
+    fun toStatusType(value: String): StatusType = enumValueOf(value)
+
+    @TypeConverter
+    fun fromStatusType(value: StatusType): String = "$value"
+}
+
+class ColorConverter {
+    @TypeConverter
+    fun toColor(value: Int): Color = Color.valueOf(value)
+
+    @TypeConverter
+    fun fromColor(value: Color): Int = value.toArgb()
+}
 
 @Entity
 data class Status(
@@ -16,13 +36,16 @@ data class Status(
     @ColumnInfo(name = "status_name")
     var statusName: String,
     @ColumnInfo(name = "status_color")
-    var statusColor: Int
+    var statusColor: Color,
+    @ColumnInfo(name = "status_type")
+    var statusType: StatusType = StatusType.PLANNED
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readInt(),
         parcel.readString().orEmpty(),
-        parcel.readInt()
+        Color.valueOf(parcel.readInt()),
+        StatusType.valueOf(parcel.readString().orEmpty())
     ) {
     }
 
@@ -30,7 +53,8 @@ data class Status(
         parcel.writeInt(statusId)
         parcel.writeInt(sortOrder)
         parcel.writeString(statusName)
-        parcel.writeInt(statusColor)
+        parcel.writeInt(statusColor.toArgb())
+        parcel.writeString("$statusType")
     }
 
     override fun describeContents(): Int {
