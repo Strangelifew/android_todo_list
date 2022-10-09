@@ -26,7 +26,7 @@ class TaskListDetailsActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeButtonEnabled(true)
 
-        editText = findViewById(R.id.text)
+        editText = findViewById(R.id.status_name)
 
         if (intent.hasExtra(EXTRA_TASK_LIST)) {
             taskList = intent.getParcelableExtra(EXTRA_TASK_LIST)!!

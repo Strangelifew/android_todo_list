@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.todolist.R
 import com.example.todolist.screens.details.TaskListDetailsActivity.Companion.startTaskListDetails
+import com.example.todolist.screens.status.StatusListActivity.Companion.startStatusList
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -28,6 +29,10 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<FloatingActionButton>(R.id.fab).setOnClickListener {
             startTaskListDetails(this, null)
+        }
+
+        findViewById<FloatingActionButton>(R.id.edit_statuses).setOnClickListener {
+            startStatusList(this)
         }
 
         ViewModelProviders.of(this).get(

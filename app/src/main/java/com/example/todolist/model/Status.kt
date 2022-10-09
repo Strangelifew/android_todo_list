@@ -8,16 +8,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 
-enum class StatusType { PLANNED, IN_PROGRESS, DONE }
-
-class StatusTypeConverter {
-    @TypeConverter
-    fun toStatusType(value: String): StatusType = enumValueOf(value)
-
-    @TypeConverter
-    fun fromStatusType(value: StatusType): String = "$value"
-}
-
 class ColorConverter {
     @TypeConverter
     fun toColor(value: Int): Color = Color.valueOf(value)
@@ -36,16 +26,13 @@ data class Status(
     @ColumnInfo(name = "status_name")
     var statusName: String,
     @ColumnInfo(name = "status_color")
-    var statusColor: Color,
-    @ColumnInfo(name = "status_type")
-    var statusType: StatusType = StatusType.PLANNED
+    var statusColor: Color
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readInt(),
         parcel.readString().orEmpty(),
         Color.valueOf(parcel.readInt()),
-        StatusType.valueOf(parcel.readString().orEmpty())
     ) {
     }
 
@@ -54,7 +41,6 @@ data class Status(
         parcel.writeInt(sortOrder)
         parcel.writeString(statusName)
         parcel.writeInt(statusColor.toArgb())
-        parcel.writeString("$statusType")
     }
 
     override fun describeContents(): Int {

@@ -9,28 +9,12 @@
     android:gravity="center">
 
     <TextView
-        android:id="@+id/task_text"
+        android:id="@+id/status_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:minHeight="64dp"
         android:gravity="center_vertical"
         tools:text="some text for testing"/>
-
-    <Spinner
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp" />
-
-
-    <ImageView
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:src="@android:drawable/ic_notification_clear_all"/>
-
-
 
 </LinearLayout>

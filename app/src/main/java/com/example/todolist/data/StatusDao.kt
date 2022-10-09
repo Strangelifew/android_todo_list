@@ -20,6 +20,9 @@ interface StatusDao {
     @Query("SELECT * FROM Status WHERE status_id = :statusId LIMIT 1")
     fun findById(statusId: Int): Status
 
+    @Query("SELECT COUNT(*) FROM Task WHERE status_id = :statusId")
+    fun countNumberOfTasksByStatus(statusId: Int): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(status: Status)
 

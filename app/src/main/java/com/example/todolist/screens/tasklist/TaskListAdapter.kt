@@ -4,6 +4,8 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SortedList
@@ -12,6 +14,7 @@ import com.example.todolist.R
 import com.example.todolist.model.Task
 import com.example.todolist.model.TaskList
 import com.example.todolist.screens.details.TaskDetailsActivity.Companion.startTaskDetails
+import com.example.todolist.screens.spinner.SpinnerAdapter
 import com.example.todolist.screens.tasklist.TaskListAdapter.TaskViewHolder
 
 class TaskListAdapter(private val taskList: TaskList) : RecyclerView.Adapter<TaskViewHolder>() {
@@ -63,12 +66,21 @@ class TaskListAdapter(private val taskList: TaskList) : RecyclerView.Adapter<Tas
         sortedList.replaceAll(tasks!!)
     }
 
-    class TaskViewHolder(itemView: View, private val taskList: TaskList) : RecyclerView.ViewHolder(itemView) {
+    class TaskViewHolder(itemView: View, private val taskList: TaskList) : RecyclerView.ViewHolder(itemView), AdapterView.OnItemSelectedListener {
         lateinit var task: Task
+        var statuses = App.statusDao.all
         fun bind(task: Task) {
             this.task = task
 
             itemView.findViewById<TextView>(R.id.task_text).text = task.description
+
+            itemView.findViewById<Spinner>(R.id.status).also {
+                it.adapter = SpinnerAdapter(itemView.context, statuses)
+
+                it.setSelection(App.taskDao.getTaskStatusId(task.taskId))
+
+                it.onItemSelectedListener = this
+            }
         }
 
         init {
@@ -77,6 +89,17 @@ class TaskListAdapter(private val taskList: TaskList) : RecyclerView.Adapter<Tas
             }
 
             itemView.findViewById<View>(R.id.delete).setOnClickListener { App.taskDao.delete(task) }
+
+
+
+
+        }
+
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            App.taskDao.update(Task(task.taskId, task.listId, position, task.description))
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>?) {
         }
     }
 

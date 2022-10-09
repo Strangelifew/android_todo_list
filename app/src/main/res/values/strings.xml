@@ -3,10 +3,15 @@
     <string name="action_settings">Settings</string>
 
     <string name="task_list_text">Введите название списка дел</string>
+    <string name="status_text">Введите название статуса</string>
     <string name="task_text">Введите название задачи</string>
     <string name="task_details_title">Задача</string>
     <string name="save">Сохранить</string>
     <string name="completed">Выполнение</string>
     <string name="edit_task_list_name">edit task list name</string>
     <string name="edit_list_name">edit list name</string>
+    <string name="statuses">Возможные состояния дел</string>
+    <string name="sort_order_hint">Введите порядок сортировки</string>
+    <string name="choose_color">choose color</string>
+    <string name="chose_color">chose color</string>
 </resources>

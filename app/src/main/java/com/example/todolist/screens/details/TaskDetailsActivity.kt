@@ -27,7 +27,7 @@ class TaskDetailsActivity : AppCompatActivity() {
 
         title = getString(R.string.task_details_title)
 
-        editText = findViewById(R.id.text)
+        editText = findViewById(R.id.status_name)
 
         if (intent.hasExtra(EXTRA_TASK)) {
             task = intent.getParcelableExtra(EXTRA_TASK)!!

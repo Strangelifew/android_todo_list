@@ -27,6 +27,10 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name="com.example.todolist.screens.details.TaskDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name="com.example.todolist.screens.details.StatusDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name="com.example.todolist.screens.status.StatusListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
