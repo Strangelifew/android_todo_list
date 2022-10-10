@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.todolist.App
 import com.example.todolist.R
 import com.example.todolist.model.Status
-import com.nvt.color.ColorPickerDialog
+import com.flask.colorpicker.ColorPickerView
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder
 
 
 class StatusDetailsActivity : AppCompatActivity() {
@@ -32,20 +33,20 @@ class StatusDetailsActivity : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.choose_color).setOnClickListener {
-            val colorPicker = ColorPickerDialog(
-                this,
-                Color.BLACK,
-                true,
-                object : ColorPickerDialog.OnColorPickerListener {
-                    override fun onCancel(dialog: ColorPickerDialog?) {
-                    }
-
-                    override fun onOk(dialog: ColorPickerDialog?, color: Int) {
-                        statusColor = Color.valueOf(color)
-                    }
-                }
-            )
-            colorPicker.show()
+            ColorPickerDialogBuilder
+                .with(this)
+                .setTitle("Choose color")
+                .initialColor(Color.BLACK)
+                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                .density(20)
+                .setPositiveButton(
+                    "ok"
+                ) { _, selectedColor, _ -> statusColor = Color.valueOf(selectedColor) }
+                .setNegativeButton(
+                    "cancel"
+                ) { _, _ -> }
+                .build()
+                .show()
         }
 
         if (intent.hasExtra(EXTRA_STATUS)) {
