@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity
@@ -12,8 +13,10 @@ data class Task(
     @ColumnInfo(name = "task_id")
     var taskId: Int = 0,
     @ColumnInfo(name = "list_id")
+    @ForeignKey(entity = TaskList::class, parentColumns = ["list_id"], childColumns = ["list_id"])
     var listId: Int,
     @ColumnInfo(name = "status_id")
+    @ForeignKey(entity = Status::class, parentColumns = ["status_id"], childColumns = ["status_id"])
     var statusId: Int = 0,
     @ColumnInfo(name = "description")
     var description: String = ""

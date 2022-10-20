@@ -8,14 +8,6 @@ import com.example.todolist.model.TaskList
 
 @Dao
 interface TaskDao {
-    @get:Query("SELECT * FROM Task")
-    val all: List<Task>
-
-    @Query("SELECT * FROM Task WHERE task_id IN (:taskIds)")
-    fun loadAllByIds(taskIds: IntArray): List<Task>
-
-    @Query("SELECT * FROM Task WHERE task_id = :taskId LIMIT 1")
-    fun findById(taskId: Int): Task
 
     @Query("SELECT * FROM Task WHERE list_id = :listId")
     fun findByListId(listId: Int): LiveData<List<Task>>

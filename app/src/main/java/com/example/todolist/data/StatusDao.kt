@@ -14,12 +14,6 @@ interface StatusDao {
     @get:Query("SELECT * FROM Status")
     val allLiveData: LiveData<List<Status>>
 
-    @Query("SELECT * FROM Status WHERE status_id IN (:statusIds)")
-    fun loadAllByIds(statusIds: IntArray): List<Status>
-
-    @Query("SELECT * FROM Status WHERE status_id = :statusId LIMIT 1")
-    fun findById(statusId: Int): Status
-
     @Query("SELECT COUNT(*) FROM Task WHERE status_id = :statusId")
     fun countNumberOfTasksByStatus(statusId: Int): Int
 

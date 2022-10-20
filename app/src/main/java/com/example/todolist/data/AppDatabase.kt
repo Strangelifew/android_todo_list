@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.todolist.model.*
 
-@Database(entities = [TaskList::class, Task::class, Status::class], version = 6)
+@Database(entities = [TaskList::class, Task::class, Status::class], version = 7)
 @TypeConverters(ColorConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun taskListDao(): TaskListDao
