@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.example.todolist.App
+import com.example.todolist.App.Companion.statusDao
 import com.example.todolist.R
 import com.example.todolist.model.Task
 import com.example.todolist.model.TaskList
@@ -33,7 +34,10 @@ class TaskDetailsActivity : AppCompatActivity() {
             task = intent.getParcelableExtra(EXTRA_TASK)!!
             editText?.setText(task.description)
         } else {
-            task = Task(listId = intent.getParcelableExtra<TaskList>(EXTRA_TASK_LIST)!!.listId)
+            task = Task(
+                listId = intent.getParcelableExtra<TaskList>(EXTRA_TASK_LIST)!!.listId,
+                statusId = statusDao.defaultStatusId
+            )
         }
     }
 

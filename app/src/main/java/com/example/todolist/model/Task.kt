@@ -8,7 +8,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity
-data class Task(
+data class Task constructor(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "task_id")
     var taskId: Int = 0,
@@ -17,7 +17,7 @@ data class Task(
     var listId: Int,
     @ColumnInfo(name = "status_id")
     @ForeignKey(entity = Status::class, parentColumns = ["status_id"], childColumns = ["status_id"])
-    var statusId: Int = 0,
+    var statusId: Int,
     @ColumnInfo(name = "description")
     var description: String = ""
 ) : Parcelable {

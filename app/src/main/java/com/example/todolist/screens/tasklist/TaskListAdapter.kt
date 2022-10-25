@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SortedList
 import com.example.todolist.App
+import com.example.todolist.App.Companion.statusDao
 import com.example.todolist.R
 import com.example.todolist.model.Task
 import com.example.todolist.model.TaskList
@@ -20,7 +21,10 @@ import com.example.todolist.screens.tasklist.TaskListAdapter.TaskViewHolder
 class TaskListAdapter(private val taskList: TaskList) : RecyclerView.Adapter<TaskViewHolder>() {
     private val sortedList: SortedList<Task> =
         SortedList(Task::class.java, object : SortedList.Callback<Task>() {
-            override fun compare(o1: Task, o2: Task): Int = o1.description.compareTo(o2.description)
+            val Task.status get() = statusDao.findById(statusId)
+            override fun compare(o1: Task, o2: Task): Int =
+                o1.status.sortOrder.compareTo(o2.status.sortOrder).takeIf { it != 0 }
+                    ?: o1.description.compareTo(o2.description)
 
             override fun onChanged(position: Int, count: Int) {
                 notifyItemRangeChanged(position, count)
@@ -31,7 +35,7 @@ class TaskListAdapter(private val taskList: TaskList) : RecyclerView.Adapter<Tas
             }
 
             override fun areItemsTheSame(item1: Task, item2: Task): Boolean {
-                return item1.listId == item2.listId
+                return item1 === item2
             }
 
             override fun onInserted(position: Int, count: Int) {
@@ -66,20 +70,41 @@ class TaskListAdapter(private val taskList: TaskList) : RecyclerView.Adapter<Tas
         sortedList.replaceAll(tasks!!)
     }
 
-    class TaskViewHolder(itemView: View, private val taskList: TaskList) : RecyclerView.ViewHolder(itemView), AdapterView.OnItemSelectedListener {
+    class TaskViewHolder(itemView: View, private val taskList: TaskList) :
+        RecyclerView.ViewHolder(itemView) {
         lateinit var task: Task
-        var statuses = App.statusDao.all
         fun bind(task: Task) {
             this.task = task
 
             itemView.findViewById<TextView>(R.id.task_text).text = task.description
 
-            itemView.findViewById<Spinner>(R.id.status).also {
-                it.adapter = SpinnerAdapter(itemView.context, statuses)
+            itemView.findViewById<Spinner>(R.id.status).apply {
+                val statuses = statusDao.all
+                adapter = SpinnerAdapter(itemView.context, statuses)
 
-                it.setSelection(App.taskDao.getTaskStatusId(task.taskId))
+                setSelection(
+                    statuses.withIndex().single {
+                        it.value.statusId == App.taskDao.getTaskStatusId(task.taskId)
+                    }.index
+                )
 
-                it.onItemSelectedListener = this
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        print("")
+                        if (task.statusId != statuses[position].statusId) {
+                            task.statusId = statuses[position].statusId
+                            App.taskDao.update(task)
+                        }
+                    }
+
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
+                }
             }
         }
 
@@ -91,16 +116,8 @@ class TaskListAdapter(private val taskList: TaskList) : RecyclerView.Adapter<Tas
             itemView.findViewById<View>(R.id.delete).setOnClickListener { App.taskDao.delete(task) }
 
 
-
-
         }
 
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            App.taskDao.update(Task(task.taskId, task.listId, position, task.description))
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-        }
     }
 
 }
