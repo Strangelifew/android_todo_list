@@ -51,7 +51,7 @@ dependencies {
     implementation "androidx.core:core-ktx:1.6.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0"
 
-    implementation 'com.github.QuadFlask:colorpicker:0.0.15'
+    implementation "com.github.novatien:SmartColorPicker:1.0.2"
 }
 repositories {
     mavenCentral()

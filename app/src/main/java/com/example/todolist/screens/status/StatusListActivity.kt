@@ -27,7 +27,6 @@ class StatusListActivity : AppCompatActivity() {
                 val from = viewHolder.adapterPosition
                 val to = target.adapterPosition
                 adapter.moveItem(from, to)
-                adapter.notifyItemMoved(from, to)
 
                 return true
             }

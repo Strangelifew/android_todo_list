@@ -9,11 +9,13 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import com.example.todolist.App
 import com.example.todolist.R
 import com.example.todolist.model.Status
-import com.flask.colorpicker.ColorPickerView
-import com.flask.colorpicker.builder.ColorPickerDialogBuilder
+import com.example.todolist.screens.status.StatusListViewModel
+import com.example.todolist.screens.tasklist.TaskListViewModel
+import com.nvt.color.ColorPickerDialog
 
 
 class StatusDetailsActivity : AppCompatActivity() {
@@ -33,20 +35,19 @@ class StatusDetailsActivity : AppCompatActivity() {
 
 
         findViewById<Button>(R.id.choose_color).setOnClickListener {
-            ColorPickerDialogBuilder
-                .with(this)
-                .setTitle("Choose color")
-                .initialColor(Color.BLACK)
-                .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                .density(20)
-                .setPositiveButton(
-                    "ok"
-                ) { _, selectedColor, _ -> statusColor = Color.valueOf(selectedColor) }
-                .setNegativeButton(
-                    "cancel"
-                ) { _, _ -> }
-                .build()
-                .show()
+            ColorPickerDialog(
+                this,
+                Color.BLACK,
+                true,
+                object : ColorPickerDialog.OnColorPickerListener {
+                    override fun onCancel(dialog: ColorPickerDialog?) {
+                    }
+
+                    override fun onOk(dialog: ColorPickerDialog?, color: Int) {
+                        statusColor = Color.valueOf(color)
+                    }
+                }
+            ).show()
         }
 
         if (intent.hasExtra(EXTRA_STATUS)) {

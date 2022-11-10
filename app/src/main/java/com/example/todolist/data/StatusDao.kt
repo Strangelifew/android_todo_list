@@ -9,7 +9,7 @@ interface StatusDao {
     @get:Query("SELECT * FROM Status ORDER BY sort_order, status_id")
     val all: List<Status>
 
-    @get:Query("SELECT * FROM Status")
+    @get:Query("SELECT * FROM Status ORDER BY sort_order, status_id")
     val allLiveData: LiveData<List<Status>>
 
     @Query("SELECT * FROM Status WHERE status_id = :statusId LIMIT 1")

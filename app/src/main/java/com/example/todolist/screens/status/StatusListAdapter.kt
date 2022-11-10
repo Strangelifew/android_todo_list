@@ -15,25 +15,29 @@ import com.example.todolist.model.Status
 import com.example.todolist.screens.details.StatusDetailsActivity.Companion.startStatusDetails
 import com.example.todolist.screens.status.StatusListAdapter.StatusViewHolder
 
-class StatusListAdapter(private val activity: StatusListActivity) : RecyclerView.Adapter<StatusViewHolder>() {
+class StatusListAdapter(private val activity: StatusListActivity) :
+    RecyclerView.Adapter<StatusViewHolder>() {
     private val statuses = mutableListOf<Status>()
-
 
 
     fun moveItem(from: Int, to: Int) {
         val fromStatus = statuses[from]
         statuses.removeAt(from)
-        if (to < from) {
-            statuses.add(to, fromStatus)
-        } else {
-            statuses.add(to - 1, fromStatus)
-        }
+        statuses.add(to, fromStatus)
         updateOrder()
+        notifyItemMoved(from, to)
+    }
+
+    private fun removeItem(status: Status) {
+        val i = statuses.indexOf(status)
+        statuses.remove(status)
+        notifyItemRemoved(i)
     }
 
 
     private fun updateOrder() {
         statuses.forEachIndexed { index, status ->
+            print("")
             if (status.sortOrder != index) {
                 status.sortOrder = index
                 statusDao.update(status)
@@ -48,17 +52,25 @@ class StatusListAdapter(private val activity: StatusListActivity) : RecyclerView
         return StatusViewHolder(
             itemView
         ).also { viewHolder ->
-            viewHolder.itemView.findViewById<View>(R.id.handleView).setOnTouchListener { view, event ->
-                if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-                    activity.startDragging(viewHolder)
+            viewHolder.itemView.findViewById<View>(R.id.handleView)
+                .setOnTouchListener { view, event ->
+                    if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                        activity.startDragging(viewHolder)
+                    }
+                    true
                 }
-                true
-            }
         }
     }
 
     override fun onBindViewHolder(holder: StatusViewHolder, position: Int) {
         holder.bind(statuses[position])
+
+        holder.itemView.findViewById<View>(R.id.delete).setOnClickListener {
+            if (statusDao.countNumberOfTasksByStatus(statuses[position].statusId) == 0) {
+                statusDao.delete(statuses[position])
+                removeItem(statuses[position])
+            }
+        }
     }
 
     override fun getItemCount(): Int {

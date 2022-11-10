@@ -85,13 +85,17 @@ class MainAdapter(private val mainActivity: MainActivity) :
             }
 
             delete.setOnClickListener {
-                if (App.taskListDao.countNumberOfTasksInList(taskList.listId) == 0) {
+                fun delete() {
+                    App.taskDao.findByListId(taskList.listId).value?.forEach(App.taskDao::delete)
                     App.taskListDao.delete(taskList)
+                }
+                if (App.taskListDao.countNumberOfTasksInList(taskList.listId) == 0) {
+                    delete()
                 } else {
                     AlertDialog.Builder(delete.context)
                         .setMessage("Are you sure to delete non empty task list?")
                         .setPositiveButton("YES") { _, _ ->
-                            App.taskListDao.delete(taskList)
+                            delete()
                         }
                         .setNegativeButton("NO") { _, _ -> }
                         .show()
