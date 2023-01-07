@@ -1,2 +1,4 @@
+rootProject.name = 'todolist'
 include ':app'
-rootProject.name='todolist'
+include ':domain'
+include ':data'
